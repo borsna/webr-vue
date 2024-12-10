@@ -2,18 +2,24 @@
 import { ref } from 'vue';
 import { WebR } from 'webr';
 
+
 const ddi = ref('');
-const state = ref('none');
+const state = ref('init');
 
 const webR = new WebR();
 webR.init();
 
+console.log('Installing DDIwR package...');
 webR.installPackages(["DDIwR"], { 
   repos: [
     "https://repo.r-wasm.org", 
     "https://dusadrian.github.io/R-wasm/repo"
   ]
+}).then(() =>{
+  console.log('DDIwR package installed!');
+  state.value = 'idle';
 });
+
 
 const handleFileChange = async (event) => {
   const file = event.target.files[0];
@@ -47,15 +53,15 @@ const handleFileChange = async (event) => {
 
 <template>
   <h1>DDIwR in WebR test</h1>
-  <div class="card">
+  <div v-if="state!='init'" class="card">
     <h2>Data file</h2>
     <input type="file" accept=".sav,.dta,.sas7bdat" @change="handleFileChange">
   </div>
-  <div v-if="state=='loading'" id="loading"></div>
+  <div v-if="state=='loading' || state=='init'" id="loading"></div>
 
   <div v-if="state=='done'" class="card">
     <h2>DDI-C 2.6</h2>
-    <pre class="no-wrap" style="border: 1px solid gray;padding:0.25rem">{{ ddi }}</pre>
+    <pre class="no-wrap" style="border: 1px solid gray;padding:0.25rem;border-radius: 0.2rem;">{{ ddi }}</pre>
   </div>
 </template>
 
