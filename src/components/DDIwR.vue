@@ -27,12 +27,10 @@ const handleFileChange = async (event) => {
       await webR.FS.writeFile('/home/web_user/' + file.name, new Uint8Array(contents));
       console.log('File uploaded and written to /home/web_user/'+file.name);
       console.log('run convert with DDIwR...');
-      let result = await webR.evalR(`
-        library(DDIwR)
-        convert("`+file.name+`", to="DDI", embed=FALSE)
-      `);
+
+      let result = await webR.evalR(`DDIwR::convert("`+file.name+`", to="DDI", embed=FALSE)`);
       let output = await result;
-      console.log('Files done, reading...');
+      console.log('Files done, reading...', output);
       
       var readDdiResult = await webR.FS.readFile('/home/web_user/'+basename+'.xml');
       var ddiString = new TextDecoder().decode(readDdiResult);
@@ -49,7 +47,7 @@ const handleFileChange = async (event) => {
 
 <template>
   <div class="card">
-    <input type="file" accept=".sav" @change="handleFileChange">
+    Data file: <input type="file" accept=".sav" @change="handleFileChange">
   </div>
   <div v-if="state=='loading'" id="loading"></div>
 
