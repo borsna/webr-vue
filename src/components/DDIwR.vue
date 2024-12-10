@@ -46,14 +46,16 @@ const handleFileChange = async (event) => {
 </script>
 
 <template>
+  <h1>DDIwR in WebR test</h1>
   <div class="card">
-    Data file: <input type="file" accept=".sav" @change="handleFileChange">
+    <h2>Data file</h2>
+    <input type="file" accept=".sav,.dta,.sas7bdat" @change="handleFileChange">
   </div>
   <div v-if="state=='loading'" id="loading"></div>
 
   <div v-if="state=='done'" class="card">
-    <h2>DDI-C</h2>
-    <pre class="no-wrap">{{ ddi }}</pre>
+    <h2>DDI-C 2.6</h2>
+    <pre class="no-wrap" style="border: 1px solid gray;padding:0.25rem">{{ ddi }}</pre>
   </div>
 </template>
 
