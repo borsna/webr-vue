@@ -1,9 +1,9 @@
 <script setup>
-import HelloWorld from './components/DDIwR.vue'
+import DDIwR from './components/DDIwR.vue'
 </script>
 
 <template>
-  <HelloWorld />
+  <DDIwR />
 </template>
 
 <style scoped>

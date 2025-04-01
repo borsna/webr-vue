@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 import { WebR } from 'webr';
 
-
 const ddi = ref('');
 const state = ref('init');
 
@@ -30,14 +29,17 @@ const handleFileChange = async (event) => {
     reader.onload = async (e) => {
       state.value = 'loading';
       const contents = e.target.result;
+      // write to the webR filesystem
       await webR.FS.writeFile('/home/web_user/' + file.name, new Uint8Array(contents));
       console.log('File uploaded and written to /home/web_user/'+file.name);
       console.log('run convert with DDIwR...');
 
+      // run the DDIwR conversion to extract DDI-C 2.6 metadata
       let result = await webR.evalR(`DDIwR::convert("`+file.name+`", to="DDI", embed=FALSE)`);
       let output = await result;
       console.log('Files done, reading...', output);
       
+      // read the DDI-C 2.6 XML file from the webR filesystem
       var readDdiResult = await webR.FS.readFile('/home/web_user/'+basename+'.xml');
       var ddiString = new TextDecoder().decode(readDdiResult);
       ddi.value = ddiString;
@@ -61,7 +63,7 @@ const handleFileChange = async (event) => {
 
   <div v-if="state=='done'" class="card">
     <h2>DDI-C 2.6</h2>
-    <pre class="no-wrap" style="border: 1px solid gray;padding:0.25rem;border-radius: 0.2rem;">{{ ddi }}</pre>
+    <pre class="language-xml no-wrap" style="border: 1px solid gray;padding:0.25rem;border-radius: 0.2rem;">{{ ddi }}</pre>
   </div>
 </template>
 
