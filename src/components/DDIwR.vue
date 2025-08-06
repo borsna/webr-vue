@@ -8,14 +8,9 @@ const state = ref('init');
 const webR = new WebR();
 webR.init();
 
-console.log('Installing DDIwR package...');
-webR.installPackages(["DDIwR"], { 
-  repos: [
-    "https://repo.r-wasm.org", 
-    "https://dusadrian.github.io/R-wasm/repo"
-  ]
-}).then(() =>{
-  console.log('DDIwR package installed!');
+console.info('Installing DDIwR package...');
+webR.installPackages(["DDIwR"]).then(() => {
+  console.info('DDIwR package installed!');
   state.value = 'idle';
 });
 
@@ -24,27 +19,27 @@ const handleFileChange = async (event) => {
   const file = event.target.files[0];
   if (file) {
     const reader = new FileReader();
-    const basename  = file.name.substr(0,file.name.lastIndexOf('.'));
+    const basename  = file.name.substr(0, file.name.lastIndexOf('.'));
 
     reader.onload = async (e) => {
       state.value = 'loading';
       const contents = e.target.result;
       // write to the webR filesystem
       await webR.FS.writeFile('/home/web_user/' + file.name, new Uint8Array(contents));
-      console.log('File uploaded and written to /home/web_user/'+file.name);
-      console.log('run convert with DDIwR...');
+      console.debug('File uploaded and written to /home/web_user/'+file.name);
+      console.info('run convert with DDIwR...');
 
       // run the DDIwR conversion to extract DDI-C 2.6 metadata
       let result = await webR.evalR(`DDIwR::convert("`+file.name+`", to="DDI", embed=FALSE)`);
       let output = await result;
-      console.log('Files done, reading...', output);
+      console.debug('Files done, reading...', output);
       
       // read the DDI-C 2.6 XML file from the webR filesystem
       var readDdiResult = await webR.FS.readFile('/home/web_user/'+basename+'.xml');
       var ddiString = new TextDecoder().decode(readDdiResult);
       ddi.value = ddiString;
 
-      console.log('DONE!');
+      console.info('DDI-C 2.6 metadata extracted successfully!');
       state.value = 'done';
     };
 
