@@ -8,12 +8,7 @@ class Parser {
     this.webR.init();
     console.log("WebR initialized");
     console.log("WebR install packages");
-    this.webR.installPackages(["DDIwR"], { 
-      repos: [
-        "https://repo.r-wasm.org", 
-        "https://dusadrian.github.io/R-wasm/repo"
-      ]
-    });
+    this.webR.installPackages(["DDIwR"]);
   }
 
   public async parse(file: File) {
