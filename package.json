@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@r-wasm/webr": "^0.2.0",
     "highlight.js": "^11.11.1",
     "papaparse": "^5.4.1",
     "vue": "^3.5.13",
