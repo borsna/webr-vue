@@ -1,4 +1,3 @@
-import { ref } from 'vue';
 import { WebR } from 'webr';
 
 class Parser {

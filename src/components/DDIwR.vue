@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { WebR } from 'webr';
+import Parser from './services/Parser.ts'
 
 const ddi = ref('');
 const state = ref('init');
@@ -13,7 +14,6 @@ webR.installPackages(["DDIwR"]).then(() => {
   console.info('DDIwR package installed!');
   state.value = 'idle';
 });
-
 
 const handleFileChange = async (event) => {
   const file = event.target.files[0];
@@ -32,7 +32,7 @@ const handleFileChange = async (event) => {
       // run the DDIwR conversion to extract DDI-C 2.6 metadata
       let result = await webR.evalR(`DDIwR::convert("`+file.name+`", to="DDI", embed=FALSE)`);
       let output = await result;
-      console.debug('Files done, reading...', output);
+      console.debug('Files done, reading...');
       
       // read the DDI-C 2.6 XML file from the webR filesystem
       var readDdiResult = await webR.FS.readFile('/home/web_user/'+basename+'.xml');
