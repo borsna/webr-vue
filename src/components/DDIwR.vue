@@ -35,12 +35,14 @@ const handleFileChange = async (event) => {
       console.debug('Files done, reading...');
       
       // read the DDI-C 2.6 XML file from the webR filesystem
-      var readDdiResult = await webR.FS.readFile('/home/web_user/'+basename+'.xml');
-      ddi.value = new TextDecoder().decode(readDdiResult);
+      ddi.value = new TextDecoder().decode(
+        await webR.FS.readFile('/home/web_user/'+basename+'.xml')
+      );
 
       // read the CSV file from the webR filesystem
-      var readCsvResult = await webR.FS.readFile('/home/web_user/'+basename+'.csv');
-      csv.value = new TextDecoder().decode(readCsvResult);
+      csv.value = new TextDecoder().decode(
+        await webR.FS.readFile('/home/web_user/'+basename+'.csv')
+      );
 
       console.info('DDI-C 2.6 metadata extracted successfully!');
       state.value = 'done';
