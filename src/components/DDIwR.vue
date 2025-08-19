@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue';
 import { WebR } from 'webr';
-import Parser from './services/Parser.ts'
 
 const ddi = ref('');
 const state = ref('init');
@@ -58,7 +57,7 @@ const handleFileChange = async (event) => {
 
   <div v-if="state=='done'" class="card">
     <h2>DDI-C 2.6</h2>
-    <pre class="language-xml no-wrap" style="border: 1px solid gray;padding:0.25rem;border-radius: 0.2rem;">{{ ddi }}</pre>
+    <highlightjs :code="ddi" language="xml" style="border: 1px solid gray;padding:0.25rem;border-radius: 0.2rem;"></highlightjs>
   </div>
 </template>
 
