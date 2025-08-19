@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { WebR } from 'webr';
 
 const ddi = ref('');
+const csv = ref('');
 const state = ref('init');
 
 const webR = new WebR();
@@ -38,6 +39,12 @@ const handleFileChange = async (event) => {
       var ddiString = new TextDecoder().decode(readDdiResult);
       ddi.value = ddiString;
 
+      // read the CSV file from the webR filesystem
+      var readCsvResult = await webR.FS.readFile('/home/web_user/'+basename+'.csv');
+      var csvString = new TextDecoder().decode(readCsvResult);
+      csv.value = csvString;
+      console.log(csv.value);
+
       console.info('DDI-C 2.6 metadata extracted successfully!');
       state.value = 'done';
     };
@@ -58,6 +65,9 @@ const handleFileChange = async (event) => {
   <div v-if="state=='done'" class="card">
     <h2>DDI-C 2.6</h2>
     <highlightjs :code="ddi" language="xml" style="border: 1px solid gray;padding:0.25rem;border-radius: 0.2rem;"></highlightjs>
+  
+    <h2>CSV</h2>
+    <highlightjs :code="csv" language="csv" style="border: 1px solid gray;padding:0.25rem;border-radius: 0.2rem;"></highlightjs>
   </div>
 </template>
 

@@ -7,5 +7,23 @@ import xmlhiglight from 'highlight.js/lib/languages/xml';
 import hljsVuePlugin from "@highlightjs/vue-plugin";
 
 hljs.registerLanguage('xml', xmlhiglight);
+hljs.registerLanguage('csv', function(hljs) {
+  return {
+    contains: [
+      {
+        className: 'string',
+        begin: /"(?:[^"]|"")*"/ // quoted fields
+      },
+      {
+        className: 'number',
+        begin: /\b\d+(\.\d+)?\b/ // numbers
+      },
+      {
+        className: 'punctuation',
+        begin: /,/ // commas
+      }
+    ]
+  }
+})
 
 createApp(App).use(hljsVuePlugin).mount('#app')
