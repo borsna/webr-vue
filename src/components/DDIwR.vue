@@ -23,27 +23,24 @@ const handleFileChange = async (event) => {
 
     reader.onload = async (e) => {
       state.value = 'loading';
-      const contents = e.target.result;
+
       // write to the webR filesystem
-      await webR.FS.writeFile('/home/web_user/' + file.name, new Uint8Array(contents));
+      await webR.FS.writeFile('/home/web_user/' + file.name, new Uint8Array(e.target.result));
       console.debug('File uploaded and written to /home/web_user/'+file.name);
       console.info('run convert with DDIwR...');
 
       // run the DDIwR conversion to extract DDI-C 2.6 metadata
-      let result = await webR.evalR(`DDIwR::convert("`+file.name+`", to="DDI", embed=FALSE)`);
-      let output = await result;
+      await webR.evalR(`DDIwR::convert("`+file.name+`", to="DDI", embed=FALSE)`);
+      
       console.debug('Files done, reading...');
       
       // read the DDI-C 2.6 XML file from the webR filesystem
       var readDdiResult = await webR.FS.readFile('/home/web_user/'+basename+'.xml');
-      var ddiString = new TextDecoder().decode(readDdiResult);
-      ddi.value = ddiString;
+      ddi.value = new TextDecoder().decode(readDdiResult);
 
       // read the CSV file from the webR filesystem
       var readCsvResult = await webR.FS.readFile('/home/web_user/'+basename+'.csv');
-      var csvString = new TextDecoder().decode(readCsvResult);
-      csv.value = csvString;
-      console.log(csv.value);
+      csv.value = new TextDecoder().decode(readCsvResult);
 
       console.info('DDI-C 2.6 metadata extracted successfully!');
       state.value = 'done';
@@ -58,22 +55,37 @@ const handleFileChange = async (event) => {
   <h1>DDIwR in WebR test</h1>
   <div v-if="state!='init'" class="card">
     <h2>Data file</h2>
-    <input type="file" accept=".sav,.dta,.sas7bdat" @change="handleFileChange">
+    <input 
+      type="file" 
+      accept=".sav,.dta,.sas7bdat" 
+      @change="handleFileChange" />
   </div>
   <div v-if="state=='loading' || state=='init'" id="loading"></div>
 
   <div v-if="state=='done'" class="card">
     <h2>DDI-C 2.6</h2>
-    <highlightjs :code="ddi" language="xml" style="border: 1px solid gray;padding:0.25rem;border-radius: 0.2rem;"></highlightjs>
-  
+    <highlightjs 
+      :code="ddi" 
+      language="xml" 
+      class="outputbox" />
+
     <h2>CSV</h2>
-    <highlightjs :code="csv" language="csv" style="border: 1px solid gray;padding:0.25rem;border-radius: 0.2rem;"></highlightjs>
+    <highlightjs 
+      :code="csv" 
+      language="csv" 
+      class="outputbox" />
   </div>
 </template>
 
 <style scoped>
 .no-wrap {
   overflow-x: auto;
+}
+
+.outputbox {
+  border: 1px solid gray;
+  padding: 0.25rem;
+  border-radius: 0.2rem;
 }
 
 #loading {
