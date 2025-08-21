@@ -78,33 +78,3 @@ const handleFileChange = async (event) => {
       class="outputbox" />
   </div>
 </template>
-
-<style scoped>
-.no-wrap {
-  overflow-x: auto;
-}
-
-.outputbox {
-  border: 1px solid gray;
-  padding: 0.25rem;
-  border-radius: 0.2rem;
-}
-
-#loading {
-  display: inline-block;
-  width: 50px;
-  height: 50px;
-  border: 3px solid rgba(55,55,55,.3);
-  border-radius: 50%;
-  border-top-color: #222;
-  animation: spin 1s ease-in-out infinite;
-  -webkit-animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-  to { -webkit-transform: rotate(360deg); }
-}
-@-webkit-keyframes spin {
-  to { -webkit-transform: rotate(360deg); }
-}
-</style>
