@@ -8,10 +8,14 @@ The output is then displayed for demontration purposes.
 * https://r-wasm.org
 * https://cran.r-project.org/web/packages/DDIwR
 
+## Test online
+You can run a distributed version of this application here:  
 
-## test
+https://borsna.se/webr-vue
+
+## Run localy
 `npm run dev`
 
-## build
+## Build localy
 `npm run build`  
 output a single index.html file in the `dist` folder.
